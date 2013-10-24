@@ -233,7 +233,8 @@ def like():
                             likecount += 1
                             hashtaglikes += 1
                             # print " - You liked #"+tag+" image "+imageid+"! Like count: "+str(likecount)+" (http://web.stagram.com/p/"+imageid+")"
-                            print " - You liked http://web.stagram.com/p/"+imageid+"! Like count: "+str(likecount)
+                            likemsg = " - You liked http://web.stagram.com/p/"+imageid+"! "
+                            print likemsg.ljust(68, ' ')+"Like count: "+str(likecount).rjust(3,' ')
 
                             repeat = False
                             sleepcount = 0
@@ -249,8 +250,8 @@ def like():
                                 
                         else:
                             sleepcount += 1
-                            print "Your account has been rate limited. Sleeping on "+tag+" for "+str(sleepcount)+" minute(s). Liked "+str(likecount)+" photo(s)..."
-                            time.sleep(60)
+                            print "Your account has been rate limited. Sleeping on "+tag+" for "+str(sleepcount*10)+" minutes. Liked "+str(likecount)+" photos until now..."
+                            time.sleep(10*60)
 
                         if maxlikelimit > 0 and maxlikelimit <= likecount:
                             print ": Max Like Limit reached, exiting"
