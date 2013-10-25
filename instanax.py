@@ -1,28 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-"""instanax command line - based on Cranklin's Instagram Bot v.1.0
+"""Instanax command line - based on Cranklin's Instagram Bot v.1.0
                            https://github.com/cranklin/Instagram-Bot
 
 Usage:
-  instanax.py <user> [--hashtags=default] [--sleeptimer=auto] [--likelimit=50] [--maxlikelimit=unlimited]
+  instanax.py <user> [--hashtags=<list>] [--sleeptimer=<seconds>] [--likelimit=<like>] [--maxlikelimit=<maxlike>]
   instanax.py (-h | --help)
   instanax.py --version
 
 Options:
   <user>                    The valid webstagram user.
-  --hashtags=default        The hashtags disctionary. [default: default]
-  --sleeptimer=auto         The sleeptimer between two likes in seconds. Set value to 0 if you don't want it to sleep at all. Set value to auto to have a random timer. [default: auto]
-  --likelimit=50            The like limit for each tags. [default: 50]
-  --maxlikelimit=unlimited  The global like limit. [default: unlimited]
+  --hashtags=<list>         The hashtags disctionary. [default: default]
+  --sleeptimer=<seconds>    The sleeptimer between two likes in seconds. Set value to 0 if you don't want it to sleep at all. Set value to auto to have a random timer. [default: auto]
+  --likelimit=<like>        The like limit for each tags. [default: 20]
+  --maxlikelimit=<maxlike>  The global like limit. [default: unlimited]
   -h --help                 Show this screen.
   --version                 Show version.
+
+Try:	instanax.py username --hashtags=test --likelimit=10
+	instanax.py username --hashtags=test --sleeptimer=0 --likelimit=10 --maxlikelimit=100
 
 """
 
 
 # Notes:
-#   instanx bot is based on Cranklin's Instagram Bot v.1.0 https://github.com/cranklin/Instagram-Bot
-#   and I (ponsfrilus) added some features:
+#   instanax bot is based on Cranklin's Instagram Bot v.1.0 https://github.com/cranklin/Instagram-Bot
+#   and I (@ponsfrilus) added some features:
 #       - added docopt parser (and added input args) (http://docopt.org)
 #       - password is now prompted (getpass)
 #       - hashtags list as dictionaries which can be choosen as input
@@ -74,7 +77,7 @@ hashtags['Food'] = ["food","foodporn","yum","instafood","yummy","amazing","insta
 
 hashtags['lausanne'] = ["lausanne","igerslausanne","iglausanne","lausannecity","lausannecitation","lausannestreetart"]
 
-hashtags['test'] = ["eVooh3lu"]
+hashtags['test'] = ["eVooh3lu","ponsfrilus","instanax","donax"]
 
 ##### NO NEED TO EDIT BELOW THIS LINE
 
@@ -260,7 +263,22 @@ def like():
 def bold(msg):
     return u'\033[1m%s\033[0m' % msg
 
+def header():
+    print """
+         _           _                         
+        (_)         | |                        
+         _ _ __  ___| |_ __ _ _ __   __ ___  __
+        | | '_ \/ __| __/ _` | '_ \ / _` \ \/ /
+        | | | | \__ \ || (_| | | | | (_| |>  < 
+        |_|_| |_|___/\__\__,_|_| |_|\__,_/_/\_\BOT
+                                     by ponsfrilus
+                          http://instanax.donax.ch
+"""
+
+
 def main():
+    header()
+    print "----"
     print "Hello %s!" % bold(str(arguments['<user>']))
     print "----"
     print "# Login process started"
@@ -278,17 +296,6 @@ def main():
     print "PPS: I'm a likeaholic, please give me more likes: http://instagr.am/ponsfrilus"
 
 if __name__ == "__main__":
-    arguments = docopt(__doc__, version='Instanax 0.1')
+    arguments = docopt(__doc__, version='Instanax Bot v0.2')
     #print(arguments)
-    print """
-         _           _                         
-        (_)         | |                        
-         _ _ __  ___| |_ __ _ _ __   __ ___  __
-        | | '_ \/ __| __/ _` | '_ \ / _` \ \/ /
-        | | | | \__ \ || (_| | | | | (_| |>  < 
-        |_|_| |_|___/\__\__,_|_| |_|\__,_/_/\_\CLI
-                                     by ponsfrilus
-                          http://instanax.donax.ch
-                                       """
-    print "----"
     main()
