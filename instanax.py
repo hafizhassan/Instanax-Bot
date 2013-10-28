@@ -10,7 +10,7 @@ Usage:
 
 Options:
   <user>                    The valid webstagram user.
-  --hashtags=<list>         The hashtags disctionary. [default: default]
+  --hashtags=<list>         The hashtags disctionary. Use MostPopular, 2ndPopular, 3rdPopular, Nature, Clouds, Art, Photo, BW, Archi, StreetArt, Food. [default: default]
   --sleeptimer=<seconds>    The sleeptimer between two likes in seconds. Set value to 0 if you don't want it to sleep at all. Set value to auto to have a random timer. [default: auto]
   --likelimit=<like>        The like limit for each tags. [default: 20]
   --maxlikelimit=<maxlike>  The global like limit. [default: unlimited]
@@ -18,10 +18,13 @@ Options:
   --version                 Show version.
 
 Try:	instanax.py username --hashtags=test --likelimit=10
-	instanax.py username --hashtags=test --sleeptimer=0 --likelimit=10 --maxlikelimit=100
+	    instanax.py username --hashtags=test --sleeptimer=0 --likelimit=10 --maxlikelimit=100
 
+Requirements:
+        python > 2.6 but < 3.0
+        pycurl library
+        web.stagram.com login prior to using the bot
 """
-
 
 # Notes:
 #   instanax bot is based on Cranklin's Instagram Bot v.1.0 https://github.com/cranklin/Instagram-Bot
@@ -43,7 +46,6 @@ import cStringIO
 import re
 import random
 import time
-
 import getpass
 from docopt import docopt
 
@@ -53,7 +55,9 @@ from docopt import docopt
 hashtags = {}
 
 # Default : most popular tags according to tagsforlike
-hashtags['default'] = hashtags['MostPopular'] = ["love","TFLers","tweegram","photooftheday","20likes","amazing","followme","follow4follow","like4like","look","instalike","igers","picoftheday","food","instadaily","instafollow","like","girl","iphoneonly","instagood","bestoftheday","instacool","instago","all_shots","follow","webstagram","colorful","style","swag"]
+hashtags['default'] = ["ponsfrilus", "instanax", "igerslausanne","igersswitzerland","epfl","igersepfl"]
+
+hashtags['MostPopular'] = ["love","TFLers","tweegram","photooftheday","20likes","amazing","followme","follow4follow","like4like","look","instalike","igers","picoftheday","food","instadaily","instafollow","like","girl","iphoneonly","instagood","bestoftheday","instacool","instago","all_shots","follow","webstagram","colorful","style","swag"]
 
 hashtags['2ndPopular'] = ["fun","instagramers","food","smile","pretty","followme","nature","lol","dog","hair","onedirection","sunset","swag","throwbackthursday","instagood","beach","statigram","friends","hot","funny","blue","life","art","instahub","photo","cool","pink","bestoftheday","clouds"]
 
@@ -77,12 +81,13 @@ hashtags['Food'] = ["food","foodporn","yum","instafood","yummy","amazing","insta
 
 hashtags['lausanne'] = ["lausanne","igerslausanne","iglausanne","lausannecity","lausannecitation","lausannestreetart"]
 
-hashtags['test'] = ["eVooh3lu","ponsfrilus","instanax","donax"]
 
 ##### NO NEED TO EDIT BELOW THIS LINE
 
 browsers = ["IE ","Mozilla/","Gecko/","Opera/","Chrome/","Safari/"]
 operatingsystems = ["Windows","Linux","OS X","compatible","Macintosh","Intel"]
+def UA():
+    return random.choice(browsers) + str(random.randrange(1,9)) + "." + str(random.randrange(0,50)) + " (" + random.choice(operatingsystems) + "; " + random.choice(operatingsystems) + "; rv:" + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + ")"
 
 def login():
     try:
@@ -104,7 +109,7 @@ def login():
     c.setopt(pycurl.ENCODING, "")
     c.setopt(pycurl.SSL_VERIFYPEER, 0)
     c.setopt(pycurl.SSL_VERIFYHOST, 0)
-    useragent = random.choice(browsers) + str(random.randrange(1,9)) + "." + str(random.randrange(0,50)) + " (" + random.choice(operatingsystems) + "; " + random.choice(operatingsystems) + "; rv:" + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + ")"
+    useragent = UA()
     c.setopt(pycurl.USERAGENT, useragent)
     c.perform()
     curlData = buf.getvalue()
@@ -123,7 +128,7 @@ def login():
     c.setopt(pycurl.ENCODING, "")
     c.setopt(pycurl.SSL_VERIFYPEER, 0)
     c.setopt(pycurl.SSL_VERIFYHOST, 0)
-    useragent = random.choice(browsers) + str(random.randrange(1,9)) + "." + str(random.randrange(0,50)) + " (" + random.choice(operatingsystems) + "; " + random.choice(operatingsystems) + "; rv:" + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + ")"
+    useragent = UA()
     c.setopt(pycurl.USERAGENT, useragent)
     c.perform()
     curlData = buf.getvalue()
@@ -145,7 +150,7 @@ def login():
     c.setopt(pycurl.SSL_VERIFYPEER, 0)
     c.setopt(pycurl.SSL_VERIFYHOST, 0)
     c.setopt(pycurl.REFERER, "https://instagram.com/accounts/login/?next=/oauth/authorize/%3Fclient_id%3D"+clientid[0]+"%26redirect_uri%3Dhttp%3A//web.stagram.com/%26response_type%3Dcode%26scope%3Dlikes%2Bcomments%2Brelationships")
-    useragent = random.choice(browsers) + str(random.randrange(1,9)) + "." + str(random.randrange(0,50)) + " (" + random.choice(operatingsystems) + "; " + random.choice(operatingsystems) + "; rv:" + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + ")"
+    useragent = UA()
     c.setopt(pycurl.USERAGENT, useragent)
     c.setopt(pycurl.POST, 1)
     c.setopt(pycurl.POSTFIELDS, postdata)
@@ -189,7 +194,7 @@ def like():
             c.setopt(pycurl.ENCODING, "")
             c.setopt(pycurl.SSL_VERIFYPEER, 0)
             c.setopt(pycurl.SSL_VERIFYHOST, 0)
-            useragent = random.choice(browsers) + str(random.randrange(1,9)) + "." + str(random.randrange(0,50)) + " (" + random.choice(operatingsystems) + "; " + random.choice(operatingsystems) + "; rv:" + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + ")"
+            useragent = UA()
             c.setopt(pycurl.USERAGENT, useragent)
             c.perform()
             curlData = buf.getvalue()
@@ -223,7 +228,7 @@ def like():
                         c.setopt(pycurl.ENCODING, "")
                         c.setopt(pycurl.SSL_VERIFYPEER, 0)
                         c.setopt(pycurl.SSL_VERIFYHOST, 0)
-                        useragent = random.choice(browsers) + str(random.randrange(1,9)) + "." + str(random.randrange(0,50)) + " (" + random.choice(operatingsystems) + "; " + random.choice(operatingsystems) + "; rv:" + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + "." + str(random.randrange(1,9)) + ")"
+                        useragent = UA()
                         c.setopt(pycurl.USERAGENT, useragent)
                         c.setopt(pycurl.POST, 1)
                         c.setopt(pycurl.POSTFIELDS, postdata)
